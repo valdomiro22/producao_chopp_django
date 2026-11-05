@@ -1,0 +1,45 @@
+{% load django_bootstrap5 %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Barris</title>
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static "css/styles.css" %}">
+</head>
+<body>
+    <div class="container">
+        <div class="cabecalho">
+            <h1 class="text-primary">Lista de Barris</h1>
+            <a href="{% url "adicionar-barril" %}"class="btn btn-primary">Adicionar Barril</a>
+        </div>
+
+        <table class="table table">
+            <thead>
+                <tr>
+                <th scope="col" class="text-primary">Nome</th>
+                <th scope="col" class="text-primary">Volume</th>
+                <th scope="col" class="text-primary">Descartável</th>
+                <th scope="col" class="text-primary">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in barris %}
+                <tr>
+                    <td scope="col">{{ b.nome }}</td>
+                    <td scope="col">{{ b.volume }}</td>
+                    <td scope="col">{{ b.descartavel }}</td>
+                    <td scope="col">
+                        <button type="button" class="btn btn-danger">Deletar</button>
+                        <button type="button" class="btn btn-primary">Editar</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

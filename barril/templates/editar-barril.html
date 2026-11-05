@@ -1,0 +1,33 @@
+{% load django_bootstrap5 %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Barril</title>
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static "css/styles.css" %}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-primary">Editar Barril</h1>
+
+        <div class="container border d-flex justify-content-evenly align-items-center p-3">
+            <p class="mb-0">Nome atual: {{ barril.nome }}</p>
+            <p class="mb-0">Volume atual: {{ barril.volume }}</p>
+            <p class="mb-0">Descartável: {{ barril.descartavel }}</p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+
+            <button type="submit" class="btn btn-primary">
+                Salvar alterações
+            </button>
+        </form>
+    </div>
+</body>
+</html>
