@@ -31,10 +31,22 @@
                 <tr>
                     <td scope="col">{{ b.nome }}</td>
                     <td scope="col">{{ b.volume }}</td>
-                    <td scope="col">{{ b.descartavel }}</td>
+                    <td>{{ b.descartavel | yesno:"Descartável,Retornável" }}</td>
+                    {% comment %} {% if b.descartavel %}
+                        <td scope="col">Descartável</td>
+                    {% else %}
+                        <td scope="col">Retornável</td>
+                    {% endif %} {% endcomment %}
                     <td scope="col">
-                        <button type="button" class="btn btn-danger">Deletar</button>
-                        <button type="button" class="btn btn-primary">Editar</button>
+                        <div class="d-flex gap-2">
+                            <form action="{% url 'deletar-barril' b.id %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">
+                                    Deletar
+                                </button>
+                            </form>
+                            <a href="{% url 'editar-barril' b.id %}" class="btn btn-primary"> Editar</a>
+                        </div>
                     </td>
                 </tr>
                 {% endfor %}

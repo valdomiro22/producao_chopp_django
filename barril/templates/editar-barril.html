@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Barril</title>
     {% bootstrap_css %}
@@ -12,9 +12,9 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="text-primary">Editar Barril</h1>
+        <h1 class="text-primary mb-3">Editar Barril</h1>
 
-        <div class="container border d-flex justify-content-evenly align-items-center p-3">
+        <div class="container bg-warning border d-flex justify-content-evenly align-items-center p-3 mb-4 rounded-2">
             <p class="mb-0">Nome atual: {{ barril.nome }}</p>
             <p class="mb-0">Volume atual: {{ barril.volume }}</p>
             <p class="mb-0">Descartável: {{ barril.descartavel }}</p>

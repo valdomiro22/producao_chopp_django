@@ -1,5 +1,5 @@
 from django.views.generic import ListView, CreateView
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Barril
 
@@ -21,4 +21,9 @@ class EditarBarrilView(UpdateView):
     model = Barril
     template_name = 'editar-barril.html'
     fields = ['nome', 'volume', 'descartavel']
+    success_url = reverse_lazy('lista-barris')
+
+
+class DeletarBarrilView(DeleteView):
+    model = Barril
     success_url = reverse_lazy('lista-barris')
