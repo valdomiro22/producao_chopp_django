@@ -1,0 +1,26 @@
+{% load django_bootstrap5 %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    {% bootstrap_css %}
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-primary">Gestão de Produção de Chopp</h1>
+        <p>Bem-vindo ao sistema!</p>
+
+        <a href="{% url 'lista-barris' %}" class="btn btn-primary">
+            Barris
+        </a>
+
+        <a href="{% url 'lista-produtos' %}" class="btn btn-primary">
+            Produtos
+        </a>
+    </div>
+</body>
+</html>
