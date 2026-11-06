@@ -1,0 +1,50 @@
+{% load django_bootstrap5 %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Produtos</title>
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static "css/styles.css" %}">
+</head>
+<body>
+    <div class="container">
+        <div class="cabecalho">
+            <h1 class="text-primary">Lista de Produtos</h1>
+            <a href="{% url "adicionar-produto" %}"class="btn btn-primary">Adicionar Produto</a>
+        </div>
+
+        <table class="table table">
+            <thead>
+                <tr>
+                <th scope="col" class="text-primary">Nome</th>
+                <th scope="col" class="text-primary">Validade</th>
+                <th scope="col" class="text-primary">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in produtos %}
+                <tr>
+                    <td scope="col">{{ b.nome }}</td>
+                    <td scope="col">{{ b.validade }}</td>
+                    <td scope="col">
+                        <div class="d-flex gap-2">
+                            <form action="{% url 'deletar-produto' b.id %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">
+                                    Deletar
+                                </button>
+                            </form>
+                            <a href="{% url 'editar-produto' b.id %}" class="btn btn-primary"> Editar</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
