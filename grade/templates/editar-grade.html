@@ -1,0 +1,34 @@
+{% load django_bootstrap5 %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Grade</title>
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static "css/styles.css" %}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-primary">Editar Grade</h1>
+
+        <div class="container bg-warning border d-flex flex-column flex-md-row
+            justify-content-evenly align-items-left
+            p-3 mb-4 rounded-2">
+            <p class="mb-0">Número atual: {{ grade.numero }}</p>
+            <p class="mb-0">Data de produção: {{ grade.data_producao }}</p>
+            <p class="mb-0">Quantidade de barris: {{ grade.quantidade_barris }}</p>
+            <p class="mb-0">Volume necessário: {{ grade.volume_necessario }}</p>
+        </div>
+        {% bootstrap_messages %}
+
+        <form method="post" class="form" autocomplete="off">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </form>
+    </div>
+</body>
+</html>

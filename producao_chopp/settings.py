@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'barril',
     'django_bootstrap5',
     'stdimage',
-    'produto'
+    'produto',
+    'grade',
 ]
 
 MIDDLEWARE = [
