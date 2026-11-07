@@ -24,4 +24,5 @@ urlpatterns = [
     path('', include('barril.urls')),
     path('', include('produto.urls')),
     path('', include('grade.urls')),
+    path('', include('producao.urls')),
 ]

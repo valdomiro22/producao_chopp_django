@@ -1,0 +1,25 @@
+{% load django_bootstrap5 %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Produção</title>
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static "css/styles.css" %}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-primary">Editar Produção</h1>
+        {% bootstrap_messages %}
+
+        <form method="post" class="form" autocomplete="off">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </form>
+    </div>
+</body>
+</html>

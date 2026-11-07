@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'stdimage',
     'produto',
     'grade',
+    'producao',
 ]
 
 MIDDLEWARE = [
