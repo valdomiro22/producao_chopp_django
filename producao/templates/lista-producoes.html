@@ -14,7 +14,12 @@
     <div class="container">
         <div class="cabecalho">
             <h1 class="text-primary">Lista de Produções</h1>
-            <a href="{% url "adicionar-producao" grade_id %}"class="btn btn-primary">Adicionar Produto</a>
+
+            <div class="links">
+                <a href="{% url "adicionar-barril" %}"class="btn btn-outline-primary">Adicionar Barril</a>
+                <a href="{% url "adicionar-produto" %}"class="btn btn-outline-primary">Adicionar Produto</a>
+                <a href="{% url "adicionar-producao" grade_id %}"class="btn btn-primary">Adicionar Produção</a>
+            </div>
         </div>
 
         <table class="table table" >
