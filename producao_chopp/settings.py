@@ -13,14 +13,18 @@ from django.core.exceptions import ImproperlyConfigured
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv(BASE_DIR / ".env")
+# Carrega o .env local, sem substituir variáveis do Railway.
+load_dotenv(BASE_DIR / ".env", override=False)
 
 
 # ==================================================
 # SEGURANÇA
 # ==================================================
 
-SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
+
+if not SECRET_KEY:
+    raise ImproperlyConfigured("DJANGO_SECRET_KEY não configurada.")
 
 DEBUG = os.getenv("DJANGO_DEBUG", "false").lower() == "true"
 
@@ -30,17 +34,30 @@ ALLOWED_HOSTS = [
     if host.strip()
 ]
 
-for host in (os.getenv("RAILWAY_PUBLIC_DOMAIN"), os.getenv("VERCEL_URL")):
-    if host and host not in ALLOWED_HOSTS:
-        ALLOWED_HOSTS.append(host)
-
 CSRF_TRUSTED_ORIGINS = [
     origin.strip()
     for origin in os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",")
     if origin.strip()
 ]
 
+# Domínios das plataformas de hospedagem
+for domain in (os.getenv("RAILWAY_PUBLIC_DOMAIN"), os.getenv("VERCEL_URL")):
+    if domain:
+        domain = domain.strip()
+
+        if domain not in ALLOWED_HOSTS:
+            ALLOWED_HOSTS.append(domain)
+
+        origin = f"https://{domain}"
+
+        if origin not in CSRF_TRUSTED_ORIGINS:
+            CSRF_TRUSTED_ORIGINS.append(origin)
+
+# HTTPS e cookies seguros
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_SSL_REDIRECT = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
 
 
 # ==================================================
@@ -59,7 +76,7 @@ INSTALLED_APPS = [
     "django_bootstrap5",
     "stdimage",
 
-    # Aplicações do projeto
+    # Aplicações
     "home",
     "barril",
     "produto",
@@ -97,6 +114,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
@@ -115,9 +133,7 @@ WSGI_APPLICATION = "producao_chopp.wsgi.application"
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if not DATABASE_URL:
-    raise ImproperlyConfigured(
-        "DATABASE_URL não configurada. Verifique o .env ou as variáveis do servidor."
-    )
+    raise ImproperlyConfigured("DATABASE_URL não configurada.")
 
 DATABASES = {
     "default": dj_database_url.parse(DATABASE_URL, conn_max_age=0)
@@ -161,6 +177,11 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
+
+
+# ==================================================
+# ARQUIVOS DE MÍDIA
+# ==================================================
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
