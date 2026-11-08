@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Grades</title>
     {% bootstrap_css %}
-    <link rel="stylesheet" href="{% static "css/styles.css" %}">
+    {% comment %} <link rel="stylesheet" href="{% static "css/styles.css" %}"> {% endcomment %}
 </head>
 <body>
     <div class="container">
@@ -28,21 +28,24 @@
                 </tr>
             </thead>
             <tbody>
-                {% for b in grades %}
-                <tr>
-                    <td scope="col">{{ b.numero }}</td>
-                    <td scope="col">{{ b.data_producao }}</td>
-                    <td scope="col">{{ b.quantidade_barris }}</td>
-                    <td scope="col">{{ b.volume_necessario }}</td>
+                {% for g in grades %}
+                <tr
+                    style="cursor: pointer;"
+                    onclick="window.location.href='{% url 'lista-producoes' g.id %}'"
+                >
+                    <td scope="col">{{ g.numero }}</td>
+                    <td scope="col">{{ g.data_producao }}</td>
+                    <td scope="col">{{ g.quantidade_barris }}</td>
+                    <td scope="col">{{ g.volume_necessario }}</td>
                     <td scope="col">
                         <div class="d-flex gap-2">
-                            <form action="{% url 'deletar-grade' b.id %}" method="post" class="d-inline">
+                            <form action="{% url 'deletar-grade' g.id %}" method="post" class="d-inline">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger">
                                     Deletar
                                 </button>
                             </form>
-                            <a href="{% url 'editar-grade' b.id %}" class="btn btn-primary"> Editar</a>
+                            <a href="{% url 'editar-grade' g.id %}" class="btn btn-primary"> Editar</a>
                         </div>
                     </td>
                 </tr>

@@ -9,6 +9,11 @@ class ListaProducoesView(ListView):
     template_name = 'lista-producoes.html'
     context_object_name = 'producoes'
 
+    def get_queryset(self):
+        grade_id = self.kwargs.get('grade_id')
+        return Producao.objects.filter(grade_id=grade_id)
+    
+
 class AdicionarProducaosView(CreateView):
     model = Producao
     template_name = 'adicionar-producao.html'

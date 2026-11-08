@@ -1,35 +1,206 @@
+
 {% load django_bootstrap5 %}
 {% load static %}
-
 
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Controle de Produção</title>
+
     {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static 'home/css/styles.css' %}">
 </head>
+
 <body>
-    <div class="container mt-4">
-        <h1 class="text-primary">Gestão de Produção de Chopp</h1>
-        <p>Bem-vindo ao sistema!</p>
+    <main class="container py-4 py-md-5">
 
-        <a href="{% url 'lista-barris' %}" class="btn btn-primary">
-            Barris
-        </a>
+        <!-- Cabeçalho -->
+        <header class="page-header mb-4">
+            <div>
+                <span class="page-subtitle">GESTÃO INDUSTRIAL</span>
+                <h1>Controle de Produção</h1>
+                <p class="text-secondary mb-0">
+                    Acompanhamento da produção de chopp
+                </p>
+            </div>
+        </header>
 
-        <a href="{% url 'lista-produtos' %}" class="btn btn-primary">
-            Produtos
-        </a>
+        <!-- Informações da produção -->
+        <section class="production-info mb-4">
+            <div class="info-item">
+                <span class="info-label">Barril</span>
+                <strong>{{ producao.barril.nome }}</strong>
+            </div>
 
-        <a href="{% url 'lista-grades' %}" class="btn btn-primary">
-            Grades
-        </a>
+            <div class="info-item">
+                <span class="info-label">Produto</span>
+                <strong>{{ producao.produto.nome }}</strong>
+            </div>
+        </section>
 
-        <a href="{% url 'lista-producoes' %}" class="btn btn-primary">
-            Produções
-        </a>
-    </div>
+        <!-- Quantidade -->
+        <section class="dashboard-section mb-4">
+            <h2 class="section-title">Quantidade de barris</h2>
+
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+                    <div class="indicator-card">
+                        <div class="indicator-label">
+                            Programado
+                        </div>
+                        <div class="indicator-body">
+                            <span class="indicator-value">
+                                {{ producao.quantidade_programada }}
+                            </span>
+                            <span class="indicator-unit">barris</span>
+                        </div>
+                        <div class="indicator-footer">
+                            Meta de produção
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <div class="indicator-card">
+                        <div class="indicator-label">
+                            Produzido
+                        </div>
+                        <div class="indicator-body">
+                            <span class="indicator-value text-success">
+                                {{ producao.quantidade_produzida }}
+                            </span>
+                            <span class="indicator-unit">barris</span>
+                        </div>
+                        <div class="indicator-footer">
+                            Quantidade realizada
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <div class="indicator-card">
+                        <div class="indicator-label">
+                            Pendente
+                        </div>
+                        <div class="indicator-body">
+                            <span class="indicator-value text-warning-emphasis">
+                                {{ producao.quantidade_pendente }}
+                            </span>
+                            <span class="indicator-unit">barris</span>
+                        </div>
+                        <div class="indicator-footer">
+                            Restante da programação
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Volume -->
+        <section class="dashboard-section mb-4">
+            <h2 class="section-title">Volume de produção</h2>
+
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+                    <div class="indicator-card">
+                        <div class="indicator-label">
+                            Volume necessário
+                        </div>
+                        <div class="indicator-body">
+                            <span class="indicator-value">
+                                {{ producao.volume_necessario|floatformat:2 }}
+                            </span>
+                            <span class="indicator-unit">hl</span>
+                        </div>
+                        <div class="indicator-footer">
+                            Volume planejado
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <div class="indicator-card">
+                        <div class="indicator-label">
+                            Volume utilizado
+                        </div>
+                        <div class="indicator-body">
+                            <span class="indicator-value text-success">
+                                {{ producao.volume_utilizado|floatformat:2 }}
+                            </span>
+                            <span class="indicator-unit">hl</span>
+                        </div>
+                        <div class="indicator-footer">
+                            Volume consumido
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <div class="indicator-card">
+                        <div class="indicator-label">
+                            Volume pendente
+                        </div>
+                        <div class="indicator-body">
+                            <span class="indicator-value text-warning-emphasis">
+                                {{ producao.volume_pendente|floatformat:2 }}
+                            </span>
+                            <span class="indicator-unit">hl</span>
+                        </div>
+                        <div class="indicator-footer">
+                            Volume restante
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lançamento -->
+        <section class="entry-section">
+            <div class="mb-3">
+                <h2 class="section-title mb-1">
+                    Apontamento de produção
+                </h2>
+                <p class="text-secondary mb-0">
+                    Informe a quantidade de barris produzidos.
+                </p>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="row g-3 align-items-end">
+                    <div class="col-12 col-md-7 col-lg-5">
+                        <label for="quantidade" class="form-label">
+                            Quantidade produzida
+                        </label>
+                        <input
+                            type="number"
+                            id="quantidade"
+                            name="quantidade"
+                            class="form-control form-control-lg"
+                            placeholder="Ex.: 10"
+                            min="1"
+                            step="1"
+                            required
+                        >
+                    </div>
+
+                    <div class="col-12 col-md-auto">
+                        <button
+                            type="submit"
+                            class="btn btn-primary btn-lg w-100"
+                        >
+                            Adicionar quantidade
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+    </main>
+
+    {% bootstrap_javascript %}
 </body>
 </html>

@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Produções</title>
     {% bootstrap_css %}
-    <link rel="stylesheet" href="{% static "css/styles.css" %}">
+    {% comment %} <link rel="stylesheet" href="{% static "css/styles.css" %}"> {% endcomment %}
 </head>
 <body>
     <div class="container">
@@ -30,7 +30,10 @@
             </thead>
             <tbody>
                 {% for p in producoes %}
-                <tr>
+                <tr
+                    style="cursor: pointer;"
+                    onclick="window.location.href='{% url 'home' p.id %}'"
+                >
                     <td scope="col">{{ p.barril.nome }}</td>
                     <td scope="col">{{ p.produto.nome }}</td>
                     <td scope="col">{{ p.quantidade_programada }}</td>
