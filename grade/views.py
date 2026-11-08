@@ -1,6 +1,7 @@
-from django.views.generic import ListView, CreateView
-from django.views.generic.edit import UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.contrib import messages
+
 from .models import Grade
 
 
@@ -13,14 +14,14 @@ class ListaGradesView(ListView):
 class AdicionarGradesView(CreateView):
     model = Grade
     template_name = 'adicionar-grade.html'
-    fields = ['numero', 'data_producao']
+    fields = ['numero', 'data_producao', 'quantidade_barris', 'volume_necessario']
     success_url = reverse_lazy('lista-grades')
 
 
 class EditarGradeView(UpdateView):
     model = Grade
     template_name = 'editar-grade.html'
-    fields = ['numero', 'data_producao']
+    fields = ['numero', 'data_producao', 'quantidade_barris']
     success_url = reverse_lazy('lista-grades')
 
 
@@ -28,4 +29,7 @@ class DeletarGradesView(DeleteView):
     model = Grade
     success_url = reverse_lazy('lista-grades')
 
-
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "Grade e produções excluídas com sucesso!")
+        return response

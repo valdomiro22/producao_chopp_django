@@ -8,13 +8,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Produções</title>
     {% bootstrap_css %}
-    {% comment %} <link rel="stylesheet" href="{% static "css/styles.css" %}"> {% endcomment %}
+    <link rel="stylesheet" href="{% static "producao/css/styles.css" %}">
 </head>
 <body>
     <div class="container">
         <div class="cabecalho">
             <h1 class="text-primary">Lista de Produções</h1>
-            <a href="{% url "adicionar-producao" %}"class="btn btn-primary">Adicionar Produto</a>
+            <a href="{% url "adicionar-producao" grade_id %}"class="btn btn-primary">Adicionar Produto</a>
         </div>
 
         <table class="table table">

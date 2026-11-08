@@ -2,9 +2,9 @@ from django.db import models
 
 
 class Producao(models.Model):
-    grade = models.ForeignKey( 'grade.Grade', on_delete=models.PROTECT, related_name='producoes')
-    barril = models.ForeignKey('barril.Barril',on_delete=models.PROTECT)
-    produto = models.ForeignKey( 'produto.Produto', on_delete=models.PROTECT)
+    grade = models.ForeignKey('grade.Grade', on_delete=models.CASCADE, related_name='producoes')
+    barril = models.ForeignKey('barril.Barril', on_delete=models.PROTECT)
+    produto = models.ForeignKey('produto.Produto', on_delete=models.PROTECT)
     quantidade_programada = models.PositiveIntegerField('Quantidade programada')
     quantidade_produzida = models.PositiveIntegerField( 'Quantidade produzida', default=0)
     data_fim_producao = models.DateField( 'Data de fim de produção', null=True, blank=True)

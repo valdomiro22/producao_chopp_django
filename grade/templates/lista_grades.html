@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Grades</title>
     {% bootstrap_css %}
-    {% comment %} <link rel="stylesheet" href="{% static "css/styles.css" %}"> {% endcomment %}
+    <link rel="stylesheet" href="{% static "grade/css/styles.css" %}">
 </head>
 <body>
     <div class="container">
@@ -16,6 +16,7 @@
             <h1 class="text-primary">Lista de Grades</h1>
             <a href="{% url "adicionar-grade" %}"class="btn btn-primary">Adicionar Grades</a>
         </div>
+        {% bootstrap_messages %}
 
         <table class="table table">
             <thead>

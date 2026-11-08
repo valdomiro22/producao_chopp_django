@@ -8,14 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adicionar Produção</title>
     {% bootstrap_css %}
-    {% comment %} <link rel="stylesheet" href="{% static "css/styles.css" %}"> {% endcomment %}
+    <link rel="stylesheet" href="{% static "producao/css/styles.css" %}">
 </head>
 <body>
     <div class="container">
         <h1 class="text-primary">Adicionar Produção</h1>
         {% bootstrap_messages %}
 
-        <form action="{% url "adicionar-producao" %}" method="post" class="form" autocomplete="off">
+        <form method="post" class="form" autocomplete="off">
         {% csrf_token %}
         {% bootstrap_form form %}
         <button type="submit" class="btn btn-primary">Adicionar</button>

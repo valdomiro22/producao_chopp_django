@@ -13,7 +13,6 @@
 <body>
     <div class="container">
         <h1 class="text-primary">Adicionar Grade</h1>
-        {% bootstrap_messages %}
 
         <form action="{% url "adicionar-grade" %}" method="post" class="form" autocomplete="off">
         {% csrf_token %}
