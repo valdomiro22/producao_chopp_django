@@ -1,4 +1,3 @@
-
 {% load django_bootstrap5 %}
 {% load static %}
 
@@ -17,7 +16,8 @@
     <main class="container py-4 py-md-5">
 
         <!-- Cabeçalho -->
-        <header class="page-header mb-4">
+
+        <header class="page-header mb-4 d-flex justify-content-between align-items-center">
             <div>
                 <span class="page-subtitle">GESTÃO INDUSTRIAL</span>
                 <h1>Controle de Produção</h1>
@@ -25,6 +25,19 @@
                     Acompanhamento da produção de chopp
                 </p>
             </div>
+
+            <nav class="navbar navbar-expand navbar-light">
+                <div class="container-fluid">
+                    <ul class="navbar-nav flex-row gap-3">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url "verificar-validade" %}">Verificar validade</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Tempo de parada</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
         </header>
 
         <!-- Informações da produção -->
