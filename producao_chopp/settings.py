@@ -22,29 +22,25 @@ load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
-DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() == "true"
+DEBUG = os.getenv("DJANGO_DEBUG", "false").lower() == "true"
 
 ALLOWED_HOSTS = [
     host.strip()
-    for host in os.getenv(
-        "DJANGO_ALLOWED_HOSTS",
-        "localhost,127.0.0.1"
-    ).split(",")
+    for host in os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
     if host.strip()
 ]
 
+for host in (os.getenv("RAILWAY_PUBLIC_DOMAIN"), os.getenv("VERCEL_URL")):
+    if host and host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(host)
+
 CSRF_TRUSTED_ORIGINS = [
     origin.strip()
-    for origin in os.getenv(
-        "DJANGO_CSRF_TRUSTED_ORIGINS", ""
-    ).split(",")
+    for origin in os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",")
     if origin.strip()
 ]
 
-SECURE_PROXY_SSL_HEADER = (
-    "HTTP_X_FORWARDED_PROTO",
-    "https"
-)
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 
 # ==================================================
@@ -78,6 +74,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -117,44 +114,14 @@ WSGI_APPLICATION = "producao_chopp.wsgi.application"
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-if DATABASE_URL:
-
-    # PostgreSQL Neon (Vercel)
-    DATABASES = {
-        "default": dj_database_url.parse(
-            DATABASE_URL,
-            conn_max_age=0,
-            ssl_require=True
-        )
-    }
-
-elif os.getenv("VERCEL"):
-
+if not DATABASE_URL:
     raise ImproperlyConfigured(
-        "DATABASE_URL não configurada na Vercel."
+        "DATABASE_URL não configurada. Verifique o .env ou as variáveis do servidor."
     )
 
-else:
-
-    # PostgreSQL local (Windows)
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.getenv(
-                "DB_NAME", "producao_chopp"
-            ),
-            "USER": os.getenv(
-                "DB_USER", "postgres"
-            ),
-            "PASSWORD": os.environ["DB_PASSWORD"],
-            "HOST": os.getenv(
-                "DB_HOST", "localhost"
-            ),
-            "PORT": os.getenv(
-                "DB_PORT", "5432"
-            ),
-        }
-    }
+DATABASES = {
+    "default": dj_database_url.parse(DATABASE_URL, conn_max_age=0)
+}
 
 
 # ==================================================
@@ -162,18 +129,10 @@ else:
 # ==================================================
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 
@@ -182,11 +141,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # ==================================================
 
 LANGUAGE_CODE = "pt-br"
-
 TIME_ZONE = "America/Sao_Paulo"
-
 USE_I18N = True
-
 USE_TZ = True
 
 
@@ -195,11 +151,18 @@ USE_TZ = True
 # ==================================================
 
 STATIC_URL = "/static/"
-
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-MEDIA_URL = "/media/"
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
 
+MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 
