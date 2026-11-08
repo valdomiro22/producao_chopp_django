@@ -11,32 +11,32 @@
     <link rel="stylesheet" href="{% static 'home/css/styles.css' %}">
 </head>
 <body>
-    <div class="container">
-        <div class="cabecalho">
-                <h1 class="text-primary">Verificar validade</h1>
-            </div>
-    
-            <form method="get">
-                <div class="mb-3">
-                <label for="data_producao" class="form-label">Data de produção</label>
-                <input type="date" class="form-control" id="data_producao" name="data_producao" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="data_validade" class="form-label">Data de validade</label>
-                <input type="date" class="form-control" id="data_validade" name="data_validade" required>
-            </div>
-    
-                <button type="submit" class="btn btn-primary">Calcular</button>
-            </form>
-    
-            {% if dias_restantes is not None %}
-                <p class="text-info fs-2 mt-4">Diferença: {{ dias_restantes }} dias</p>
-            {% endif %}
-    
-            {% if erro %}
-                <p class="text-danger">{{ erro }}</p>
-            {% endif %}
+<div class="container">
+    <div class="cabecalho">
+        <h1 class="text-primary">Verificar validade</h1>
     </div>
+
+    <form method="get">
+        <div class="mb-3">
+            <label for="data_producao" class="form-label">Data de produção</label>
+            <input type="date" class="form-control" id="data_producao" name="data_producao" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="data_validade" class="form-label">Data de validade</label>
+            <input type="date" class="form-control" id="data_validade" name="data_validade" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Calcular</button>
+    </form>
+
+    {% if dias_restantes is not None %}
+        <p class="text-info fs-2 mt-4">Diferença: {{ dias_restantes }} dias</p>
+    {% endif %}
+
+    {% if erro %}
+        <p class="text-danger">{{ erro }}</p>
+    {% endif %}
+</div>
 </body>
 </html>

@@ -1,0 +1,41 @@
+{% load django_bootstrap5 %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static 'home/css/styles.css' %}">
+</head>
+<body>
+<div class="container">
+    <div class="cabecalho">
+        <h1 class="text-primary">Verificar tempo de parada</h1>
+    </div>
+
+    <form method="get">
+        <div class="mb-3">
+            <label for="horario_inicio" class="form-label">Horário de início</label>
+            <input type="time" name="horario_inicio" id="horario_inicio" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="horario_fim" class="form-label">Horário de fim</label>
+            <input type="time" name="horario_fim" id="horario_fim" class="form-control">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Calcular</button>
+    </form>
+
+    {% if horas_parada %}
+        <p class="text-info fs-2 mt-4">Tempo de parada: <span class="text-warning">{{ horas_parada }}</span> horas</p>
+    {% endif %}
+
+    {% if erro %}
+        <p class="text-danger">{{ erro }}</p>
+    {% endif %}
+</div>
+</body>
+</html>
