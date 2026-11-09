@@ -35,6 +35,10 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url "verificar-tempo-parada" %}">Tempo de parada</a>
                         </li>
+                        <li class="nav-item">
+                            {% comment %} <a href="{% url 'historico' producao.id %}" class="btn btn-outline-primary">Ver histórico</a> {% endcomment %}
+                            <a href="{% url 'historico' producao.id %}" class="nav-link">Ver histórico</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -170,7 +174,7 @@
         </section>
 
         <!-- Lançamento -->
-        <section class="entry-section">
+        {% comment %} <section class="entry-section">
             <div class="mb-3">
                 <h2 class="section-title mb-1">
                     Apontamento de produção
@@ -210,8 +214,23 @@
                     </div>
                 </div>
             </form>
-        </section>
+        </section> {% endcomment %}
 
+        <form action="{% url 'adicionar-quantidade' producao.id %}" method="post">
+    {% csrf_token %}
+
+    {% bootstrap_form form %}
+
+    <div class="d-flex gap-2">
+        <button type="submit" name="tipo" value="SOMA" class="btn btn-success">
+            Adicionar
+        </button>
+
+        <button type="submit" name="tipo" value="SUBTRACAO" class="btn btn-danger">
+            Retirar
+        </button>
+    </div>
+</form>
     </main>
 
     {% bootstrap_javascript %}

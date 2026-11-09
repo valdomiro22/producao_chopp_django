@@ -1,4 +1,5 @@
 from django.db import models
+from .enums import TipoQuantidade
 
 
 class Producao(models.Model):
@@ -30,3 +31,17 @@ class Producao(models.Model):
     @property
     def volume_pendente(self):
         return self.quantidade_pendente * self.barril.volume / 100
+
+
+from django.db import models
+from django.utils import timezone
+from .enums import TipoQuantidade
+
+class Quantidade(models.Model):
+    producao = models.ForeignKey('producao.Producao', on_delete=models.CASCADE, related_name='quantidades')
+    horario = models.TimeField(default=timezone.localtime)
+    quantidade = models.PositiveIntegerField()
+    tipo = models.CharField(max_length=20, choices=TipoQuantidade.choices)
+    criado_em = models.DateTimeField('Criado em', auto_now_add=True)
+    editado_em = models.DateTimeField('Editado em', auto_now=True)
+    ativo = models.BooleanField('Ativo', default=True)

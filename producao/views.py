@@ -1,7 +1,11 @@
+from django.db import transaction
+from django.views.generic import CreateView
+from django.urls import reverse
+from .forms import QuantidadeForm
+from .enums import TipoQuantidade
 from django.views.generic import ListView, CreateView
 from django.views.generic.edit import UpdateView, DeleteView
-from django.urls import reverse_lazy, reverse
-from .models import Producao
+from .models import Producao, Quantidade
 
 
 class ListaProducoesView(ListView):
@@ -22,11 +26,22 @@ class ListaProducoesView(ListView):
 class AdicionarProducaosView(CreateView):
     model = Producao
     template_name = 'adicionar-producao.html'
-    fields = ["barril", "produto", "quantidade_programada", "quantidade_produzida"]
+    fields = ['barril', 'produto', 'quantidade_programada', 'quantidade_produzida']
 
+    @transaction.atomic
     def form_valid(self, form):
         form.instance.grade_id = self.kwargs.get('grade_id')
-        return super().form_valid(form)
+
+        response = super().form_valid(form)
+
+        if self.object.quantidade_produzida > 0:
+            Quantidade.objects.create(
+                producao=self.object,
+                quantidade=self.object.quantidade_produzida,
+                tipo=TipoQuantidade.DEFINICAO_INICIAL
+            )
+
+        return response
 
     def get_success_url(self):
         return reverse('lista-producoes', kwargs={'grade_id': self.object.grade_id})
@@ -35,7 +50,24 @@ class AdicionarProducaosView(CreateView):
 class EditarProducaoView(UpdateView):
     model = Producao
     template_name = 'editar-producao.html'
-    fields = ["grade", "barril", "produto", "quantidade_programada", "quantidade_produzida"]
+    fields = ['grade', 'barril', 'produto', 'quantidade_programada', 'quantidade_produzida']
+
+    @transaction.atomic
+    def form_valid(self, form):
+        quantidade_anterior = Producao.objects.get(pk=self.object.pk).quantidade_produzida
+
+        response = super().form_valid(form)
+
+        quantidade_nova = self.object.quantidade_produzida
+
+        if quantidade_anterior != quantidade_nova:
+            Quantidade.objects.create(
+                producao=self.object,
+                quantidade=quantidade_nova,
+                tipo=TipoQuantidade.AJUSTE_CORRECAO
+            )
+
+        return response
 
     def get_success_url(self):
         return reverse('lista-producoes', kwargs={'grade_id': self.object.grade_id})
@@ -46,3 +78,38 @@ class DeletarProducaosView(DeleteView):
 
     def get_success_url(self):
         return reverse('lista-producoes', kwargs={'grade_id': self.object.grade_id})
+
+
+class AdicionarQuantidadeView(CreateView):
+    model = Quantidade
+    form_class = QuantidadeForm
+
+    def form_valid(self, form):
+        form.instance.producao_id = self.kwargs.get('producao_id')
+
+        tipo = self.request.POST.get('tipo')
+
+        if tipo not in [TipoQuantidade.SOMA, TipoQuantidade.SUBTRACAO]:
+            form.add_error(None, 'Tipo de movimentação inválido.')
+            return self.form_invalid(form)
+
+        form.instance.tipo = tipo
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('home', kwargs={'producao_id': self.object.producao_id})
+
+
+class ListaQuantidadesView(ListView):
+    model = Quantidade
+    template_name = 'historico.html'
+    context_object_name = 'quantidades'
+
+    def get_queryset(self):
+        producao_id = self.kwargs.get('producao_id')
+        return Quantidade.objects.filter(producao_id=producao_id).order_by('-criado_em')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['producao_id'] = self.kwargs.get('producao_id')
+        return context

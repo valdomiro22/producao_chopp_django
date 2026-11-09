@@ -1,6 +1,8 @@
 from django.views.generic import DetailView
 from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 from django.views.generic import TemplateView
+from producao.forms import QuantidadeForm
 from producao.models import Producao
 
 class HomeView(DetailView):
@@ -8,6 +10,11 @@ class HomeView(DetailView):
     template_name = 'index.html'
     context_object_name = 'producao'
     pk_url_kwarg = 'producao_id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = QuantidadeForm()
+        return context
 
 
 class VerificarValidade(TemplateView):
@@ -30,10 +37,6 @@ class VerificarValidade(TemplateView):
                 context['erro'] = 'Informe datas válidas.'
 
         return context
-
-
-from datetime import datetime, timedelta
-from django.views.generic import TemplateView
 
 
 class CalcularTempoParada(TemplateView):
