@@ -1,4 +1,3 @@
-
 {% load django_bootstrap5 %}
 {% load static %}
 
@@ -64,113 +63,115 @@
 </head>
 
 <body>
-    <main class="container py-4 py-md-5">
+<main class="container py-4 py-md-5">
 
-        <!-- Cabeçalho -->
-        <header class="d-flex justify-content-between align-items-center mb-4">
-            <div>
+    <!-- Cabeçalho -->
+    <header class="d-flex justify-content-between align-items-center mb-4">
+        <div>
                 <span class="text-secondary small text-uppercase">
-                    Gestão industrial
+                    Produção de Chopp
                 </span>
 
-                <h1 class="h3 fw-bold mb-1">
-                    Histórico de apontamentos
-                </h1>
+            <h1 class="h3 fw-bold mb-1">
+                Histórico de apontamentos
+            </h1>
 
-                <p class="text-secondary mb-0">
-                    Movimentações registradas na produção
-                </p>
-            </div>
+            <p class="text-secondary mb-0">
+                Movimentações registradas na produção
+            </p>
+        </div>
+    </header>
 
-            <a href="{% url 'home' producao_id %}"
-               class="btn btn-outline-secondary">
-                Voltar
-            </a>
-        </header>
 
-        <!-- Lista de movimentações -->
-        <section>
+    <div class="text-center bg-primary rounded-3 p-1 border mb-3">
+        <h5 class="text-light">Total produzido nesta produção</h5>
 
-            {% for quantidade in quantidades %}
+        <p class="text-light mb-0">{{ soma }} Barris</p>
+    </div>
 
-                <div class="historico-card d-flex align-items-center gap-3">
+    <!-- Lista de movimentações -->
+    <section>
 
-                    <!-- Ícone -->
+        {% for quantidade in quantidades %}
+
+            <div class="historico-card d-flex align-items-center gap-3">
+
+                <!-- Ícone -->
+                {% if quantidade.tipo == 'SOMA' %}
+                    <div class="movimentacao-icon movimentacao-soma align-items-center">
+                        +
+                    </div>
+
+                {% elif quantidade.tipo == 'SUBTRACAO' %}
+                    <div class="movimentacao-icon movimentacao-subtracao">
+                        −
+                    </div>
+
+                {% else %}
+                    <div class="movimentacao-icon movimentacao-outro">
+                        •
+                    </div>
+                {% endif %}
+
+                <!-- Informações -->
+                <div class="flex-grow-1">
+
+                    <div class="fw-semibold">
+                        {{ quantidade.get_tipo_display }}
+                    </div>
+
+                    <div class="text-secondary small">
+                        {{ quantidade.criado_em|date:"d/m/Y" }}
+                        às
+                        {{ quantidade.criado_em|date:"H:i" }}
+                    </div>
+
+                </div>
+
+                <!-- Quantidade -->
+                <div class="text-end">
+
                     {% if quantidade.tipo == 'SOMA' %}
-                        <div class="movimentacao-icon movimentacao-soma">
-                            +
+                        <div class="quantidade-valor text-success">
+                            +{{ quantidade.quantidade }}
                         </div>
 
                     {% elif quantidade.tipo == 'SUBTRACAO' %}
-                        <div class="movimentacao-icon movimentacao-subtracao">
-                            −
+                        <div class="quantidade-valor text-danger">
+                            {{ quantidade.quantidade }}
                         </div>
 
                     {% else %}
-                        <div class="movimentacao-icon movimentacao-outro">
-                            •
+                        <div class="quantidade-valor">
+                            {{ quantidade.quantidade }}
                         </div>
                     {% endif %}
 
-                    <!-- Informações -->
-                    <div class="flex-grow-1">
-
-                        <div class="fw-semibold">
-                            {{ quantidade.get_tipo_display }}
-                        </div>
-
-                        <div class="text-secondary small">
-                            {{ quantidade.criado_em|date:"d/m/Y" }}
-                            às
-                            {{ quantidade.criado_em|date:"H:i" }}
-                        </div>
-
-                    </div>
-
-                    <!-- Quantidade -->
-                    <div class="text-end">
-
-                        {% if quantidade.tipo == 'SOMA' %}
-                            <div class="quantidade-valor text-success">
-                                +{{ quantidade.quantidade }}
-                            </div>
-
-                        {% elif quantidade.tipo == 'SUBTRACAO' %}
-                            <div class="quantidade-valor text-danger">
-                                -{{ quantidade.quantidade }}
-                            </div>
-
-                        {% else %}
-                            <div class="quantidade-valor">
-                                {{ quantidade.quantidade }}
-                            </div>
-                        {% endif %}
-
-                        <div class="text-secondary small">
-                            barris
-                        </div>
-
+                    <div class="text-secondary small">
+                        barris
                     </div>
 
                 </div>
 
-            {% empty %}
+            </div>
 
-                <div class="text-center bg-white rounded-3 p-5 border">
-                    <h5>Nenhum apontamento encontrado</h5>
+        {% empty %}
 
-                    <p class="text-secondary mb-0">
-                        As movimentações aparecerão aqui
-                        quando forem registradas.
-                    </p>
-                </div>
+            <div class="text-center bg-white rounded-3 p-5 border">
+                <h5>Nenhum apontamento encontrado</h5>
 
-            {% endfor %}
+                <p class="text-secondary mb-0">
+                    As movimentações aparecerão aqui
+                    quando forem registradas.
+                </p>
+            </div>
 
-        </section>
+        {% endfor %}
 
-    </main>
+    </section>
 
-    {% bootstrap_javascript %}
+</main>
+
+{% bootstrap_javascript %}
 </body>
 </html>

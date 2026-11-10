@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.db.models import Sum
 from django.views.generic import CreateView
 from django.urls import reverse
 from .forms import QuantidadeForm
@@ -85,7 +86,8 @@ class AdicionarQuantidadeView(CreateView):
     form_class = QuantidadeForm
 
     def form_valid(self, form):
-        form.instance.producao_id = self.kwargs.get('producao_id')
+        producao_id = self.kwargs.get('producao_id')
+        form.instance.producao_id = producao_id
 
         tipo = self.request.POST.get('tipo')
 
@@ -93,8 +95,23 @@ class AdicionarQuantidadeView(CreateView):
             form.add_error(None, 'Tipo de movimentação inválido.')
             return self.form_invalid(form)
 
+        quantidade = form.cleaned_data['quantidade']
+
+        if tipo == TipoQuantidade.SUBTRACAO:
+            quantidade = -abs(quantidade)
+        else:
+            quantidade = abs(quantidade)
+
+        form.instance.quantidade = quantidade
         form.instance.tipo = tipo
-        return super().form_valid(form)
+
+        response = super().form_valid(form)
+
+        producao = Producao.objects.get(id=producao_id)
+        producao.quantidade_produzida += quantidade
+        producao.save()
+
+        return response
 
     def get_success_url(self):
         return reverse('home', kwargs={'producao_id': self.object.producao_id})
@@ -109,7 +126,15 @@ class ListaQuantidadesView(ListView):
         producao_id = self.kwargs.get('producao_id')
         return Quantidade.objects.filter(producao_id=producao_id).order_by('-criado_em')
 
+    def soma_quantidades(self):
+        producao_id = self.kwargs.get('producao_id')
+
+        return Quantidade.objects.filter(
+            producao_id=producao_id
+        ).aggregate(total=Sum('quantidade'))['total'] or 0
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['producao_id'] = self.kwargs.get('producao_id')
+        context['soma'] = self.soma_quantidades
         return context
