@@ -1,6 +1,6 @@
 from django.db import transaction
 from django.db.models import Sum
-from django.views.generic import CreateView
+from grade.models import Grade
 from django.urls import reverse
 from .forms import QuantidadeForm
 from .enums import TipoQuantidade
@@ -23,7 +23,6 @@ class ListaProducoesView(ListView):
         context['grade_id'] = self.kwargs.get('grade_id')
         return context
 
-
 class AdicionarProducaosView(CreateView):
     model = Producao
     template_name = 'adicionar-producao.html'
@@ -42,11 +41,14 @@ class AdicionarProducaosView(CreateView):
                 tipo=TipoQuantidade.DEFINICAO_INICIAL
             )
 
+        grade = Grade.objects.get(id=self.object.grade_id)
+        grade.quantidade_barris += self.object.quantidade_programada
+        grade.save()
+
         return response
 
     def get_success_url(self):
         return reverse('lista-producoes', kwargs={'grade_id': self.object.grade_id})
-
 
 class EditarProducaoView(UpdateView):
     model = Producao
