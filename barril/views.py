@@ -14,14 +14,14 @@ class AdicionarBarrilView(CreateView):
     model = Barril
     template_name = 'adicionar-barril.html'
     fields = ['nome', 'volume', 'descartavel']
-    success_url = reverse_lazy('lista-barris')
+    # success_url = reverse_lazy('lista-barris')
 
 
 class EditarBarrilView(UpdateView):
     model = Barril
     template_name = 'editar-barril.html'
     fields = ['nome', 'volume', 'descartavel']
-    success_url = reverse_lazy('lista-barris')
+    # success_url = reverse_lazy('lista-barris')
 
 
 class DeletarBarrilView(DeleteView):

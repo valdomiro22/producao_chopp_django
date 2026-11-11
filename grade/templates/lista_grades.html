@@ -14,11 +14,10 @@
     <div class="container">
         <div class="cabecalho">
             <h1 class="text-primary">Lista de Grades</h1>
-            <a href="{% url "adicionar-grade" %}"class="btn btn-primary">Adicionar Grades</a>
+            <a href="{% url "adicionar-grade" %}" class="btn btn-primary">Adicionar Grades</a>
         </div>
-        {% bootstrap_messages %}
 
-        <table class="table table">
+        <table class="table w-100" style="table-layout: fixed;">
             <thead>
                 <tr>
                 <th scope="col" class="text-primary">Número</th>
@@ -35,9 +34,9 @@
                     onclick="window.location.href='{% url 'lista-producoes' g.id %}'"
                 >
                     <td scope="col">{{ g.numero }}</td>
-                    <td scope="col">{{ g.data_producao }}</td>
+                    <td scope="col">{{ g.data_producao|date:"d/m/Y" }}</td>
                     <td scope="col">{{ g.quantidade_barris }}</td>
-                    <td scope="col">{{ g.volume_necessario }}</td>
+                    <td scope="col">{{ g.volume_necessario }} hl</td>
                     <td scope="col">
                         <div class="d-flex gap-2">
                             <form action="{% url 'deletar-grade' g.id %}" method="post" class="d-inline">

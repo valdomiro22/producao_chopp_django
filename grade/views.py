@@ -14,14 +14,14 @@ class ListaGradesView(ListView):
 class AdicionarGradesView(CreateView):
     model = Grade
     template_name = 'adicionar-grade.html'
-    fields = ['numero', 'data_producao', 'quantidade_barris', 'volume_necessario']
+    fields = ['numero', 'data_producao']
     success_url = reverse_lazy('lista-grades')
 
 
 class EditarGradeView(UpdateView):
     model = Grade
     template_name = 'editar-grade.html'
-    fields = ['numero', 'data_producao', 'quantidade_barris']
+    fields = ['numero', 'data_producao']
     success_url = reverse_lazy('lista-grades')
 
 

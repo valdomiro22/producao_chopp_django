@@ -12,8 +12,14 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="text-primary">Adicionar Produção</h1>
-        {% bootstrap_messages %}
+        <div class="cabecalho">
+            <h1 class="text-primary">Adicionar Produção</h1>
+
+            <div class="links">
+                <a href="{% url "adicionar-barril" %}" class="btn btn-primary">Adicionar Barril</a>
+                <a href="{% url "adicionar-produto" %}" class="btn btn-primary">Adicionar Produto</a>
+            </div>
+        </div>
 
         <form method="post" class="form" autocomplete="off">
         {% csrf_token %}

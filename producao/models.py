@@ -34,7 +34,6 @@ class Producao(models.Model):
         return self.quantidade_pendente * self.barril.volume / 100
 
 
-
 class Quantidade(models.Model):
     producao = models.ForeignKey('producao.Producao', on_delete=models.CASCADE, related_name='quantidades')
     horario = models.TimeField(default=timezone.localtime)
