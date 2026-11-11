@@ -1,0 +1,141 @@
+
+{% load django_bootstrap5 %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Produção</title>
+
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static 'home/css/home.css' %}">
+</head>
+<body>
+
+<main class="container py-4 py-lg-5">
+
+    <!-- Cabeçalho -->
+    <header class="page-header mb-4">
+        <div>
+            <span class="page-subtitle">PRODUÇÃO DE CHOPP</span>
+            <h1>Controle de Produção</h1>
+            <p class="text-secondary mb-0">
+                Acompanhamento da produção de chopp
+            </p>
+        </div>
+
+        <nav class="d-flex flex-wrap align-items-center gap-2">
+            <a href="{% url 'lista-producoes' producao.grade_id %}" class="btn btn-outline-secondary">
+                Voltar
+            </a>
+            <a href="{% url 'verificar-validade' %}" class="btn btn-outline-primary">
+                Verificar
+            </a>
+            <a href="{% url 'verificar-tempo-parada' %}" class="btn btn-outline-primary">
+                Parada
+            </a>
+            <a href="{% url 'historico' producao.id %}" class="btn btn-outline-primary">
+                Histórico
+            </a>
+        </nav>
+    </header>
+
+    <!-- Informações da produção -->
+    <section class="production-info mb-4">
+        <div class="info-item">
+            <span class="info-label">BARRIL</span>
+            <strong>{{ producao.barril.nome }}</strong>
+        </div>
+
+        <div class="info-item">
+            <span class="info-label">PRODUTO</span>
+            <strong>{{ producao.produto.nome }}</strong>
+        </div>
+    </section>
+
+    <!-- Lançamento -->
+    <section class="painel mb-4">
+        <div class="painel-header">
+            <h2>Lançamento de Produção</h2>
+            <p>Insira a quantidade produzida por horário</p>
+        </div>
+
+        <form action="{% url 'adicionar-quantidade' producao.id %}" method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+
+            <div class="d-flex flex-wrap gap-2 mt-3">
+                <button type="submit" name="tipo" value="SOMA" class="btn btn-success px-4">
+                    + Adicionar
+                </button>
+
+                <button type="submit" name="tipo" value="SUBTRACAO" class="btn btn-danger px-4">
+                    − Retirar
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <!-- Indicadores -->
+    <section class="status-producao mb-4">
+
+        <div class="card-status card-programado">
+            <div class="card-conteudo">
+                <span class="card-nome">Programado</span>
+                <span class="card-tag">DEMANDA</span>
+            </div>
+            <p class="card-valor">{{ producao.quantidade_programada }}</p>
+            <span class="card-unidade">barris programados</span>
+        </div>
+
+        <div class="card-status card-produzido">
+            <div class="card-conteudo">
+                <span class="card-nome">Produzido</span>
+                <span class="card-tag">REALIZADO</span>
+            </div>
+            <p class="card-valor">{{ producao.quantidade_produzida }}</p>
+            <span class="card-unidade">barris produzidos</span>
+        </div>
+
+        <div class="card-status card-pendente">
+            <div class="card-conteudo">
+                <span class="card-nome">Pendente</span>
+                <span class="card-tag">SALDO</span>
+            </div>
+            <p class="card-valor">{{ producao.quantidade_pendente }}</p>
+            <span class="card-unidade">barris restantes</span>
+        </div>
+
+    </section>
+
+    <!-- Volume -->
+    <section class="painel mb-4">
+        <div class="painel-header">
+            <h2>Controle de Volume</h2>
+            <p>Indicadores de consumo da produção</p>
+        </div>
+
+        <div class="nivel-buffer">
+            <div class="volume-item">
+                <span>Volume para a produção</span>
+                <strong>{{ producao.volume_necessario }} hl</strong>
+            </div>
+
+            <div class="volume-item">
+                <span>Volume consumido</span>
+                <strong>{{ producao.volume_utilizado }} hl</strong>
+            </div>
+
+            <div class="volume-item">
+                <span>Volume pendente</span>
+                <strong>{{ producao.volume_pendente }} hl</strong>
+            </div>
+        </div>
+    </section>
+</main>
+
+{% bootstrap_javascript %}
+</body>
+</html>

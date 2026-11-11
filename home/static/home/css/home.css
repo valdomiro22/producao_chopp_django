@@ -1,0 +1,266 @@
+
+:root {
+    --background: #f3f6fa;
+    --surface: #ffffff;
+    --primary: #2563eb;
+    --text-primary: #172338;
+    --text-secondary: #64748b;
+    --border: #e2e8f0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--background);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Cabeçalho */
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.page-header h1 {
+    font-size: clamp(1.7rem, 4vw, 2.3rem);
+    font-weight: 750;
+    letter-spacing: -0.8px;
+    margin: 6px 0;
+}
+
+.page-subtitle {
+    color: var(--primary);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 1.6px;
+}
+
+/* Informações da produção */
+
+.production-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    padding: 22px 26px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 180px;
+}
+
+.info-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+}
+
+.info-item strong {
+    font-size: 1.1rem;
+    font-weight: 650;
+}
+
+/* Cards de indicadores */
+
+.status-producao {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.card-status {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--primary);
+    border-radius: 14px;
+    padding: 24px;
+    min-width: 0;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.03);
+}
+
+.card-conteudo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.card-nome {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.card-tag {
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    padding: 5px 8px;
+    border-radius: 6px;
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.card-valor {
+    font-size: clamp(2.2rem, 4vw, 3rem);
+    font-weight: 750;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    margin: 20px 0 8px;
+}
+
+.card-unidade {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* Cores específicas */
+
+.card-programado {
+    border-left-color: #2563eb;
+}
+
+.card-programado .card-valor {
+    color: #2563eb;
+}
+
+.card-produzido {
+    border-left-color: #16a34a;
+}
+
+.card-produzido .card-valor {
+    color: #16a34a;
+}
+
+.card-produzido .card-tag {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.card-pendente {
+    border-left-color: #ea580c;
+}
+
+.card-pendente .card-valor {
+    color: #ea580c;
+}
+
+.card-pendente .card-tag {
+    background: #ffedd5;
+    color: #c2410c;
+}
+
+/* Painéis */
+
+.painel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 26px;
+}
+
+.painel-header {
+    margin-bottom: 24px;
+}
+
+.painel-header h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.painel-header p {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+/* Controle de volume */
+
+.nivel-buffer {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.volume-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 18px;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+.volume-item span {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.volume-item strong {
+    font-size: 1.5rem;
+    font-weight: 750;
+}
+
+/* Formulário */
+
+.painel form {
+    max-width: 600px;
+}
+
+.painel form .form-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.painel form .form-control,
+.painel form .form-select {
+    border-radius: 8px;
+    padding: 10px 12px;
+    border-color: var(--border);
+}
+
+.painel form .form-control:focus,
+.painel form .form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Responsividade */
+
+@media (max-width: 768px) {
+    .page-header {
+        align-items: flex-start;
+    }
+
+    .status-producao {
+        grid-template-columns: 1fr;
+    }
+
+    .nivel-buffer {
+        grid-template-columns: 1fr;
+    }
+
+    .production-info {
+        gap: 20px;
+    }
+
+    .painel {
+        padding: 20px;
+    }
+}

@@ -7,7 +7,7 @@ from producao.models import Producao
 
 class HomeView(DetailView):
     model = Producao
-    template_name = 'index.html'
+    template_name = 'home.html'
     context_object_name = 'producao'
     pk_url_kwarg = 'producao_id'
 
